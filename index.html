@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Capitalizer</title>
+    <!-- Importing Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        #inputText {
+            height: 100px;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="center-align">Text Capitalizer</h1>
+        <div class="input-field">
+            <select id="textDropdown1" onchange="autoEnterText('textDropdown1')">
+                <option value="" selected disabled>Select text</option>
+                <option value="GPON FIBER INSTALL">GPON FIBER INSTALL</option>
+                <option value="XGPON FIBER INSTALL">XGPON FIBER INSTALL</option>
+                <option value="HSIA COPPER INSTALL">HSIA COPPER INSTALL</option>
+                <option value="FAILED CSI">FAILED CSI</option>
+                <option value="COPPER REPAIR">COPPER REPAIR</option>
+                <option value="FIBER REPAIR">FIBER REPAIR</option>
+            </select>
+            <label>Insert Predefined Text</label>
+        </div>
+        <div class="input-field">
+            <select id="textDropdown2" onchange="autoEnterText('textDropdown2')">
+                <option value="" selected disabled>Select text</option>
+                <option value="CLEANED AND SCOPED">CLEANED AND SCOPED</option>
+                <option value="EDUCATED CX">EDUCATED CX</option>
+                <option value="LOGGED CX INTO SHM">LOGGED CX INTO SHM</option>
+            </select>
+            <label>Insert Additional Text</label>
+        </div>
+        <div class="input-field">
+            <textarea id="inputText" class="materialize-textarea" placeholder="Enter your text here..."></textarea>
+            <label for="inputText">Input Text</label>
+        </div>
+        <div id="output" class="card-panel"></div>
+        <div class="center-align" style="margin-top: 20px;">
+            <button class="btn waves-effect waves-light" onclick="copyToClipboard()">Copy</button>
+        </div>
+    </div>
+
+    <!-- Importing Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        // Initialize the dropdowns
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            M.FormSelect.init(elems);
+        });
+
+        function convertToCaps() {
+            let inputText = document.getElementById('inputText').value;
+            return inputText.toUpperCase();
+        }
+
+        function autoEnterText(dropdownId) {
+            let dropdown = document.getElementById(dropdownId);
+            let inputText = document.getElementById('inputText');
+            let selectedText = dropdown.value;
+            if (selectedText) {
+                inputText.value += "\n" + selectedText;
+                document.getElementById('output').innerText = convertToCaps();
+                dropdown.selectedIndex = 0; // Reset the dropdown
+                M.FormSelect.init(dropdown); // Reinitialize the dropdown
+            }
+        }
+
+        function copyToClipboard() {
+            let outputText = convertToCaps();
+            let tempInput = document.createElement('textarea');
+            tempInput.value = outputText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            M.toast({html: 'Text copied to clipboard!', classes: 'rounded'});
+        }
+    </script>
+</body>
+</html>
+
