@@ -31,7 +31,7 @@
         <h1 class="center-align">Text Capitalizer</h1>
         <div class="input-field">
             <select id="textDropdown1" onchange="autoEnterText('textDropdown1')">
-                <option value="" selected disabled>Select text</option>
+                <option value="" selected disabled>Job Type</option>
                 <option value="GPON FIBER INSTALL">GPON FIBER INSTALL</option>
                 <option value="XGPON FIBER INSTALL">XGPON FIBER INSTALL</option>
                 <option value="HSIA COPPER INSTALL">HSIA COPPER INSTALL</option>
@@ -43,7 +43,7 @@
         </div>
         <div class="input-field">
             <select id="textDropdown2" onchange="autoEnterText('textDropdown2')">
-                <option value="" selected disabled>Select text</option>
+                <option value="" selected disabled>Job Actions</option>
                 <option value="CLEANED AND SCOPED">CLEANED AND SCOPED</option>
                 <option value="EDUCATED CX">EDUCATED CX</option>
                 <option value="LOGGED CX INTO SHM">LOGGED CX INTO SHM</option>
@@ -51,7 +51,7 @@
             <label>Insert Additional Text</label>
         </div>
         <div class="input-field">
-            <textarea id="inputText" class="materialize-textarea" placeholder="Enter your text here..."></textarea>
+            <textarea id="inputText" class="materialize-textarea" placeholder="Enter your text here..." oninput="updateOutput()"></textarea>
             <label for="inputText">Input Text</label>
         </div>
         <div id="output" class="card-panel"></div>
@@ -69,9 +69,8 @@
             M.FormSelect.init(elems);
         });
 
-        function convertToCaps() {
-            let inputText = document.getElementById('inputText').value;
-            return inputText.toUpperCase();
+        function convertToCaps(text) {
+            return text.toUpperCase();
         }
 
         function autoEnterText(dropdownId) {
@@ -80,14 +79,19 @@
             let selectedText = dropdown.value;
             if (selectedText) {
                 inputText.value += "\n" + selectedText;
-                document.getElementById('output').innerText = convertToCaps();
+                updateOutput();
                 dropdown.selectedIndex = 0; // Reset the dropdown
                 M.FormSelect.init(dropdown); // Reinitialize the dropdown
             }
         }
 
+        function updateOutput() {
+            let inputText = document.getElementById('inputText').value;
+            document.getElementById('output').innerText = convertToCaps(inputText);
+        }
+
         function copyToClipboard() {
-            let outputText = convertToCaps();
+            let outputText = document.getElementById('output').innerText;
             let tempInput = document.createElement('textarea');
             tempInput.value = outputText;
             document.body.appendChild(tempInput);
